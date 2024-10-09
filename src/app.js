@@ -1,6 +1,5 @@
 const express = require('express')
 const routes = require('./routes')
-//const productoRuta = require('./routes/productos.route')
 const db = require('./models')
 const crearValoresInicialesDB = require('./seeders/semillaInicial')
 
