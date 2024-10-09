@@ -19,5 +19,22 @@ controller.createFabricante = async (req, res) => {
   res.status(201).json(fabricante)
 }
 
+controller.updateFabricante = async (req,res) =>{
+  const {nombre,descripcion,numeroContacto,pathImgPerfil} = req.body
+  const id = req.params.id
+  const fabricante = await Fabricante.findByPk(id)
+  fabricante.nombre = nombre,
+  fabricante.descripcion = descripcion,
+  fabricante.numeroContacto = numeroContacto,
+  fabricante.pathImgPerfil = pathImgPerfil
+  await fabricante.save()
+  res.status(200).json(fabricante)
+}
+
+controller.deleteFabricante = async(req,res) => {
+  const idDelFabricante = req.params.id
+  const fabricante = await Fabricante.destroy({where : {id:idDelFabricante}})
+  res.status(204).json({mensaje: `filas afectadas ${fabricante}`})
+}
 
 module.exports = controller

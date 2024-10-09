@@ -1,4 +1,4 @@
-const {Producto, Fabricante} = require('../models')
+const {Producto, Fabricante, Componente} = require('../models')
 
 const controller = {}
 
@@ -44,9 +44,60 @@ controller.getFabricantesByProducto = async (req, res) => {
       attributes: ['id', 'nombre', 'direccion', 'numeroContacto', 'pathImgPerfil'],
       through: { attributes: [] }
     }]
-})
-  
+}) 
   res.status(200).json(productoConFabricantes)
 }
+
+controller.updateProduct = async (req,res) =>{
+  const {nombre,descripcion,precio,pathImg} = req.body
+  const id = req.params.id
+  const producto = await Producto.findByPk(id)
+  producto.nombre = nombre,
+  producto.descripcion = descripcion,
+  producto.precio = precio,
+  producto.pathImg = pathImg
+  await producto.save()
+  res.status(200).json(producto)
+}
+
+controller.deleteSerieById = async (req,res) => {
+  const idProducto = req.params.id
+  const producto = await Producto.destroy({where:{id:idProducto}})
+  res.status(204).json({mensaje : `filas afectadas ${producto}`})
+}
+
+controller.addComponenteToProducto = async (req,res) => {
+  const arrayDeComponentes = req.body
+  const id = req.params.id
+  const producto = await Producto.findByPk(id)
+
+  const promesas = []
+  arrayDeComponentes.forEach(com =>{
+    promesas.push(Componente.create(com))
+  })
+
+  const componentes = await Promise.all(promesas)
+  producto.addComponentes(componentes)
+  res.status(201).json({message:'componentes agregados al producto'})
+}
+
+controller.getComponentesByProducto = async (req, res) => {      // Revisar, no funciona y no encuentro el error
+  const id = req.params.id
+  const productoConComponentes = await Producto.findOne({
+    where: {id}, 
+    include: [{
+      model: Componente,
+      as: 'componentes',
+      attributes: ['id','nombre','descripcion'],
+      through: { attributes: [] }
+    }]
+  }) 
+  res.status(200).json(productoConComponentes)
+
+
+}
+
+
+
 
 module.exports = controller
