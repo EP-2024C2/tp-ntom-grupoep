@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Producto.belongsToMany(models.Componente,{through:'Producto_Componente'})
-      Producto.belongsToMany(models.Fabricante,{through:'Producto_Fabricante'})
+      Producto.belongsToMany(models.Fabricante,{
+        through:'Producto_Fabricante',
+        as: 'fabricantes'
+      })
     }
   }
   Producto.init({
