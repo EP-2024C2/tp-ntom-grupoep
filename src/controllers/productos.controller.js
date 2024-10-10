@@ -62,8 +62,8 @@ controller.updateProduct = async (req,res) =>{
 
 controller.deleteSerieById = async (req,res) => {
   const idProducto = req.params.id
-  const producto = await Producto.destroy({where:{id:idProducto}})
-  res.status(204).json({mensaje : `filas afectadas ${producto}`})
+  const filasAfectadas = await Producto.destroy({where:{id:idProducto}})
+  res.status(204).json({mensaje : `filas afectadas ${filasAfectadas}`})
 }
 
 controller.addComponenteToProducto = async (req,res) => {
@@ -81,7 +81,7 @@ controller.addComponenteToProducto = async (req,res) => {
   res.status(201).json({message:'componentes agregados al producto'})
 }
 
-controller.getComponentesByProducto = async (req, res) => {      // Revisar, no funciona y no encuentro el error
+controller.getComponentesByProducto = async (req, res) => {
   const id = req.params.id
   const productoConComponentes = await Producto.findOne({
     where: {id}, 
@@ -93,8 +93,6 @@ controller.getComponentesByProducto = async (req, res) => {      // Revisar, no 
     }]
   }) 
   res.status(200).json(productoConComponentes)
-
-
 }
 
 

@@ -1,4 +1,4 @@
-const {Componente} = require('../models')
+const {Componente, Producto} = require('../models')
 
 const controller = {}
 
@@ -13,10 +13,38 @@ controller.getComponenteById = async (req, res) => {
   res.status(201).json(componente)
 }
 
+controller.getProductosByComponente = async (req, res) => {
+  const id = req.params.id
+  const componenteConProductos = await Componente.findOne({
+    where: {id}, 
+    include: [{
+      model: Producto,
+      as: 'productos',
+      attributes: ['id','nombre','descripcion', 'precio', 'pathImg'],
+      through: { attributes: [] }
+    }]
+  }) 
+  res.status(200).json(componenteConProductos)
+}
+
 controller.createComponente = async (req, res) => {
   const {nombre, descripcion} = req.body
   const componente = await Componente.create({nombre, descripcion})
   res.status(201).json(componente)
+}
+
+controller.updateComponente = async (req, res) => {
+  const id = req.params.id
+  const {nombre, descripcion} = req.body
+  const componente = await Componente.findByPk(id)
+  await componente.update({nombre, descripcion})
+  res.status(200).json(componente)
+}
+
+controller.deleteComponente = async (req, res) => {
+  const id = req.params.id
+  const filasAfectadas = await Componente.destroy({where : {id}})
+  res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})
 }
 
 module.exports = controller

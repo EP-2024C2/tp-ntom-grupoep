@@ -1,4 +1,4 @@
-const {Fabricante} = require('../models')
+const {Fabricante, Producto} = require('../models')
 
 const controller = {}
 
@@ -11,6 +11,20 @@ controller.getFabricanteById = async (req, res) => {
   const id = req.params.id
   const fabricante = await Fabricante.findOne({where:{id}})
   res.status(200).json(fabricante)
+}
+
+controller.getProductosByFabricante = async (req, res) => {
+  const id = req.params.id
+  const fabricanteConProductos = await Fabricante.findOne({
+    where: {id}, 
+    include: [{
+      model: Producto,
+      as: 'productos',
+      attributes: ['id','nombre','descripcion', 'precio', 'pathImg'],
+      through: { attributes: [] }
+    }]
+  }) 
+  res.status(200).json(fabricanteConProductos)
 }
 
 controller.createFabricante = async (req, res) => {
@@ -32,9 +46,9 @@ controller.updateFabricante = async (req,res) =>{
 }
 
 controller.deleteFabricante = async(req,res) => {
-  const idDelFabricante = req.params.id
-  const fabricante = await Fabricante.destroy({where : {id:idDelFabricante}})
-  res.status(204).json({mensaje: `filas afectadas ${fabricante}`})
+  const id = req.params.id
+  const filasAfectadas = await Fabricante.destroy({where : {id}})
+  res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})
 }
 
 module.exports = controller
