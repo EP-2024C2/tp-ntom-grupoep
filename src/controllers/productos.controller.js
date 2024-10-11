@@ -52,18 +52,18 @@ controller.updateProduct = async (req,res) =>{
   const {nombre,descripcion,precio,pathImg} = req.body
   const id = req.params.id
   const producto = await Producto.findByPk(id)
-  producto.nombre = nombre,
-  producto.descripcion = descripcion,
-  producto.precio = precio,
-  producto.pathImg = pathImg
-  await producto.save()
+  await producto.update({nombre, descripcion, precio, pathImg})
   res.status(200).json(producto)
 }
 
 controller.deleteSerieById = async (req,res) => {
-  const idProducto = req.params.id
-  const filasAfectadas = await Producto.destroy({where:{id:idProducto}})
-  res.status(204).json({mensaje : `filas afectadas ${filasAfectadas}`})
+  try {
+    const idProducto = req.params.id
+    const filasAfectadas = await Producto.destroy({where:{id:idProducto}})
+    res.status(204).json({mensaje : `filas afectadas ${filasAfectadas}`})    
+  } catch (error) {
+    res.status(500).json({mensaje:`error al intentar eliminar el archivo: ${error}`})
+  }
 }
 
 controller.addComponenteToProducto = async (req,res) => {
@@ -94,8 +94,6 @@ controller.getComponentesByProducto = async (req, res) => {
   }) 
   res.status(200).json(productoConComponentes)
 }
-
-
 
 
 module.exports = controller

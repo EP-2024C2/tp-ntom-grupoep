@@ -1,5 +1,4 @@
-const imagenRegExp = new RegExp(/.*\.(jpg|jpeg|png|gif|bmp|webp)$/i)
-
+const imagenRegExp = new RegExp(/.*\.(jpg|jpeg|png|bmp|webp)$/i)
 
 const validateImagenUrl = (urlImagen) => {
     if (!imagenRegExp.test(urlImagen)) {

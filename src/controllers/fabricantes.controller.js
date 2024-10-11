@@ -1,4 +1,5 @@
 const {Fabricante, Producto} = require('../models')
+const { message } = require('../schemas/productos.schema')
 
 const controller = {}
 
@@ -37,18 +38,18 @@ controller.updateFabricante = async (req,res) =>{
   const {nombre,descripcion,numeroContacto,pathImgPerfil} = req.body
   const id = req.params.id
   const fabricante = await Fabricante.findByPk(id)
-  fabricante.nombre = nombre,
-  fabricante.descripcion = descripcion,
-  fabricante.numeroContacto = numeroContacto,
-  fabricante.pathImgPerfil = pathImgPerfil
-  await fabricante.save()
+  await fabricante.update({nombre, descripcion, numeroContacto, pathImgPerfil})
   res.status(200).json(fabricante)
 }
 
 controller.deleteFabricante = async(req,res) => {
-  const id = req.params.id
-  const filasAfectadas = await Fabricante.destroy({where : {id}})
-  res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})
+  try {
+    const id = req.params.id
+    const filasAfectadas = await Fabricante.destroy({where : {id}})
+    res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})    
+  } catch (error) {
+    res.status(500).json({mensaje:`error al intentar eliminar el archivo: ${error}`})
+  }
 }
 
 module.exports = controller

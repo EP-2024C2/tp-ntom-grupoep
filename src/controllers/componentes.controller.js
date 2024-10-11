@@ -42,9 +42,13 @@ controller.updateComponente = async (req, res) => {
 }
 
 controller.deleteComponente = async (req, res) => {
-  const id = req.params.id
-  const filasAfectadas = await Componente.destroy({where : {id}})
-  res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})
+  try {
+    const id = req.params.id
+    const filasAfectadas = await Componente.destroy({where : {id}})
+    res.status(204).json({mensaje: `filas afectadas ${filasAfectadas}`})    
+  } catch (error) {
+    res.status(500).json({mensaje:`error al intentar eliminar el archivo: ${error}`})
+  }
 }
 
 module.exports = controller
