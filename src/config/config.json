@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "grupoepDB",
-    "host": "data/data.sqlite",
-    "dialect": "sqlite"
+    "username": "postgres",
+    "password": "123456",
+    "database": "grupoep",
+    "host": "localhost",
+    "dialect": "postgres"
   },
   "test": {
     "username": "root",
