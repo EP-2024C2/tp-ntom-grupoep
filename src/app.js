@@ -2,6 +2,7 @@ const express = require('express')
 const routes = require('./routes')
 const db = require('./models')
 const crearValoresInicialesDB = require('./seeders/semillaInicial')
+require('dotenv').config()
 
 const app = express()
 
@@ -21,7 +22,7 @@ async function startDB () {
 
 startDB()
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Escuchando en el puerto ${PORT}`)
 })
